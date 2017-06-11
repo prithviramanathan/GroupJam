@@ -21,61 +21,47 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:textSize="20dp"
-        app:layout_constraintVertical_weight="0.35"
+        app:layout_constraintVertical_weight="0.25"
         app:layout_constraintHorizontal_weight="1"
-        android:layout_marginBottom="10dp"
-        android:background="@color/colorPrimaryDark"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/primarycolorround"
         android:textColor="@color/colorAccent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectSoundCloud"
-        app:layout_constraintBottom_toTopOf="@+id/joinGroup"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/line"
+        android:layout_marginTop="150dp"
         android:id="@+id/createGroup" />
 
     <Button
         android:text="Join Group"
         android:textSize="20dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/secondcolorround"
         android:textColor="@color/colorAccent"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintVertical_weight="0.35"
+        app:layout_constraintVertical_weight="0.25"
         app:layout_constraintHorizontal_weight="1"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createGroup"
+        app:layout_constraintTop_toBottomOf="@+id/line"
+        android:layout_marginBottom="150dp"
 
         android:id="@+id/joinGroup" />
 
-    <ImageButton
+    <TextView
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintVertical_weight="0.15"
-        android:layout_marginBottom="20dp"
-        android:background="@null"
-        app:srcCompat="@drawable/spotify"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginRight="20dp"
-        app:layout_constraintBottom_toTopOf="@id/createGroup"
+        android:layout_height="2dp"
+        android:background="#E0E0E0"
+        app:layout_constraintTop_toBottomOf="@+id/createGroup"
+        app:layout_constraintBottom_toTopOf="@+id/joinGroup"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/connectSoundCloud"
-        android:id="@+id/connectSpotify" />
-    <ImageButton
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintVertical_weight="0.15"
-        android:layout_marginBottom="20dp"
-        android:background="@null"
-        app:srcCompat="@drawable/soundcloud"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/createGroup"
-        app:layout_constraintLeft_toRightOf="@+id/connectSpotify"
         app:layout_constraintRight_toRightOf="parent"
-        android:id="@+id/connectSoundCloud" />
+        android:id="@+id/line"
+        />
+
 
 
 </android.support.constraint.ConstraintLayout>

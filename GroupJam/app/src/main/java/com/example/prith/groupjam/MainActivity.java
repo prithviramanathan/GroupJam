@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase mDatabase;
 
     Button joinGroup;
+    Button createGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent joinIntent = new Intent(getApplicationContext(), JoinGroup.class);
                 startActivity(joinIntent);
+            }
+        });
+
+        createGroup = (Button) findViewById(R.id.createGroup);
+        createGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent createIntent = new Intent(getApplicationContext(), CreateGroup.class);
+                startActivity(createIntent);
             }
         });
 

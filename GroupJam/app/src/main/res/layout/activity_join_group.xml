@@ -28,35 +28,35 @@
 
 
     <Button
-        android:text="Enter Private Group Code"
+        android:text="Private Group"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:textSize="20dp"
-        app:layout_constraintVertical_weight="0.5"
+        app:layout_constraintVertical_weight="0.25"
         app:layout_constraintHorizontal_weight="1"
-        android:layout_marginBottom="10dp"
-        android:background="@color/colorPrimaryDark"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/primarycolorround"
         android:textColor="@color/colorAccent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bar"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="160dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         app:layout_constraintBottom_toTopOf="@+id/joinPublicGroup"
         android:id="@+id/joinPrivateGroup" />
 
     <Button
-        android:text="Join Nearby Public Group"
+        android:text="Public Group"
         android:textSize="20dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/secondcolorround"
         android:textColor="@color/colorAccent"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintVertical_weight="0.5"
+        app:layout_constraintVertical_weight="0.25"
         app:layout_constraintHorizontal_weight="1"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="160dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -65,5 +65,16 @@
         app:layout_constraintTop_toBottomOf="@+id/joinPrivateGroup"
 
         android:id="@+id/joinPublicGroup" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="#E0E0E0"
+        app:layout_constraintTop_toBottomOf="@+id/joinPrivateGroup"
+        app:layout_constraintBottom_toTopOf="@+id/joinPublicGroup"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/line2"
+        />
 
 </android.support.constraint.ConstraintLayout>

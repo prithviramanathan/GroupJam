@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@color/background"
+    tools:context="com.example.prith.groupjam.MainActivity">
+
+
+
+    <Button
+        android:text="Create Group"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textSize="20dp"
+        app:layout_constraintVertical_weight="0.35"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginBottom="10dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connectSoundCloud"
+        app:layout_constraintBottom_toTopOf="@+id/joinGroup"
+        android:id="@+id/createGroup" />
+
+    <Button
+        android:text="Join Group"
+        android:textSize="20dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="0.35"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createGroup"
+
+        android:id="@+id/joinGroup" />
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintVertical_weight="0.15"
+        android:layout_marginBottom="20dp"
+        android:background="@null"
+        app:srcCompat="@drawable/spotify"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="20dp"
+        app:layout_constraintBottom_toTopOf="@id/createGroup"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/connectSoundCloud"
+        android:id="@+id/connectSpotify" />
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintVertical_weight="0.15"
+        android:layout_marginBottom="20dp"
+        android:background="@null"
+        app:srcCompat="@drawable/soundcloud"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/createGroup"
+        app:layout_constraintLeft_toRightOf="@+id/connectSpotify"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/connectSoundCloud" />
+
+
+</android.support.constraint.ConstraintLayout>

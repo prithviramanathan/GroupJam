@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Group Jam</string>
+    <string name="title_activity_join_group">JoinGroup</string>
+</resources>

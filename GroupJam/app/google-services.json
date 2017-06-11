@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "476308189477",
+    "firebase_url": "https://group-jam.firebaseio.com",
+    "project_id": "group-jam",
+    "storage_bucket": "group-jam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476308189477:android:5409c4e46cbe3ad8",
+        "android_client_info": {
+          "package_name": "com.example.prith.groupjam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "476308189477-jlbg68k8kq8qr1erot8eb126jtm5bmu2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.prith.groupjam",
+            "certificate_hash": "4a9c2e7759c287908c8d47e6f14a098e85e7cdff"
+          }
+        },
+        {
+          "client_id": "476308189477-a1eddg54hi39u4rqavv7jhdmt8t6gdac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8VfYUcOFLlP7hFyzJOGI4wDCWR7gTlKs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "476308189477-a1eddg54hi39u4rqavv7jhdmt8t6gdac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

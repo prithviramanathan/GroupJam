@@ -88,9 +88,9 @@ public class GroupForNormals extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.logoutButton){
             auth.signOut();
-            Intent restart = getIntent();
+            Intent restart = new Intent(getApplicationContext(), MainActivity.class);
             finish();
-            startActivity(restart);
+            startActivity(restart);;
         }
         return true;
     }

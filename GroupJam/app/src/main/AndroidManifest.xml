@@ -26,6 +26,18 @@
             android:name=".CreateGroup"
             android:label="@string/title_activity_create_group"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".GroupForAdmin"
+            android:label="@string/title_activity_group_for_admin"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".GroupForNormals"
+            android:label="@string/title_activity_group_for_normals"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EnterGroupCode"
+            android:label="@string/title_activity_enter_group_code"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

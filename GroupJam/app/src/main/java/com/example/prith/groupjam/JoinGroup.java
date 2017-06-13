@@ -10,11 +10,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class JoinGroup extends AppCompatActivity {
     FirebaseAuth authentication;
+
+    Button publicGroup;
+    Button privateGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,18 +28,31 @@ public class JoinGroup extends AppCompatActivity {
         toolbar.setTitle("Join Group Options");
         setSupportActionBar(toolbar);
 
+
+
+
         //for back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         authentication = FirebaseAuth.getInstance();
 
+        privateGroup = (Button) findViewById(R.id.joinPrivateGroup);
+        privateGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent enterCode = new Intent(getApplicationContext(), EnterGroupCode.class);
+                startActivity(enterCode);
+            }
+        });
+
+
+
     }
 
 
-    //gotten from stack overflow. For back button
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }

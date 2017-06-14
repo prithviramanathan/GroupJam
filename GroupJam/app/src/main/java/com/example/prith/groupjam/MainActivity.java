@@ -21,21 +21,33 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.spotify.sdk.android.authentication.AuthenticationClient;
+import com.spotify.sdk.android.authentication.AuthenticationRequest;
+import com.spotify.sdk.android.authentication.AuthenticationResponse;
+import com.spotify.sdk.android.player.Config;
+import com.spotify.sdk.android.player.Player;
+import com.spotify.sdk.android.player.Spotify;
+import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.spotify.sdk.android.authentication.LoginActivity.REQUEST_CODE;
 
 public class MainActivity extends AppCompatActivity {
     List<AuthUI.IdpConfig> signInOptions;
     FirebaseAuth authentication;
     final int SIGN_IN_REQUEST_CODE = 1;
     final int FIND_IMAGE_REQUEST_CODE = 2;
+
     private static final int REQUEST_READ_PERMISSION = 100;
     Intent i;
     private FirebaseDatabase mDatabase;
 
     Button joinGroup;
     Button createGroup;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
                 Toast.makeText(getApplicationContext(), "Could not sign in", Toast.LENGTH_SHORT).show();
             }
+
         }
 
     }
@@ -117,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
             startActivity(restart);
         }
+
         return true;
     }
 }

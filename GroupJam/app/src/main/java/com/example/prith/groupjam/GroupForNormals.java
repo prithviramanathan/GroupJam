@@ -19,8 +19,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.spotify.sdk.android.authentication.AuthenticationClient;
+import com.spotify.sdk.android.authentication.AuthenticationRequest;
+import com.spotify.sdk.android.authentication.AuthenticationResponse;
+import com.spotify.sdk.android.player.Config;
+import com.spotify.sdk.android.player.ConnectionStateCallback;
+import com.spotify.sdk.android.player.Error;
+import com.spotify.sdk.android.player.Player;
+import com.spotify.sdk.android.player.PlayerEvent;
+import com.spotify.sdk.android.player.Spotify;
+import com.spotify.sdk.android.player.SpotifyPlayer;
 
-public class GroupForNormals extends AppCompatActivity {
+public class GroupForNormals extends AppCompatActivity implements
+        Player.NotificationCallback, ConnectionStateCallback {
     public static final String mAccessCode = "";
     String accessCode;
     String groupName;
@@ -28,6 +39,11 @@ public class GroupForNormals extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseDatabase mDatabase;
     DatabaseReference allGroupsReference;
+    final int SPOTIFY_SIGN_IN_CODE = 1337;
+
+    final String SPOTIFY_CLIENT_ID = "b65b55195dfe4a1b99d1422eb6014ceb";
+    final String SPOTIFY_URI = "myGroupJam://callback";
+    private Player mPlayer;
 
     TextView accessCodeView;
     TextView capacityView;
@@ -73,6 +89,17 @@ public class GroupForNormals extends AppCompatActivity {
         });
 
 
+
+        //spotify log in on activity start
+        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(SPOTIFY_CLIENT_ID,
+                AuthenticationResponse.Type.TOKEN,
+                SPOTIFY_URI);
+        builder.setScopes(new String[]{"user-read-private", "streaming"});
+        AuthenticationRequest request = builder.build();
+
+        AuthenticationClient.openLoginActivity(this, SPOTIFY_SIGN_IN_CODE, request);
+
+
     }
 
 
@@ -95,4 +122,76 @@ public class GroupForNormals extends AppCompatActivity {
         return true;
     }
 
+
+
+
+
+
+    //all the activity results possible for this activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SPOTIFY_SIGN_IN_CODE) {
+            AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, data);
+            if (response.getType() == AuthenticationResponse.Type.TOKEN) {
+                Config playerConfig = new Config(this, response.getAccessToken(), SPOTIFY_CLIENT_ID);
+                Spotify.getPlayer(playerConfig, this, new SpotifyPlayer.InitializationObserver() {
+                    @Override
+                    public void onInitialized(SpotifyPlayer spotifyPlayer) {
+                        mPlayer = spotifyPlayer;
+                        mPlayer.addConnectionStateCallback(GroupForNormals.this);
+                        mPlayer.addNotificationCallback(GroupForNormals.this);
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
+                    }
+                });
+            }
+        }
+
+    }
+
+    @Override
+    public void onLoggedIn() {
+        mPlayer.playUri(null, "spotify:track:2TpxZ7JUBn3uw46aR7qd6V", 0, 0);
+    }
+
+    @Override
+    public void onLoggedOut() {
+        Log.d("MainActivity", "User logged in");
+    }
+
+    @Override
+    public void onLoginFailed(Error error) {
+        Log.d("MainActivity", "Could not log in");
+    }
+
+    @Override
+    public void onTemporaryError() {
+
+    }
+
+    @Override
+    public void onConnectionMessage(String s) {
+
+    }
+
+    @Override
+    public void onPlaybackEvent(PlayerEvent playerEvent) {
+
+    }
+
+    @Override
+    public void onPlaybackError(Error error) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        // VERY IMPORTANT! This must always be called or else you will leak resources
+        Spotify.destroyPlayer(this);
+        super.onDestroy();
+    }
 }

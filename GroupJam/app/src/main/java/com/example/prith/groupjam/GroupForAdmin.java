@@ -37,6 +37,7 @@ public class GroupForAdmin extends AppCompatActivity implements
     String accessCode;
     String groupName;
     String groupID;
+    String spotifyAccessToken;
     FirebaseAuth auth;
     FirebaseDatabase mDatabase;
     DatabaseReference allGroupsReference;
@@ -48,6 +49,8 @@ public class GroupForAdmin extends AppCompatActivity implements
 
     TextView accessCodeView;
     TextView capacityView;
+
+    FloatingActionButton searchOnSpotify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +103,17 @@ public class GroupForAdmin extends AppCompatActivity implements
 
         AuthenticationClient.openLoginActivity(this, SPOTIFY_SIGN_IN_CODE, request);
 
-
+        searchOnSpotify = (FloatingActionButton) findViewById(R.id.fabSearchSpotify);
+        searchOnSpotify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent search = new Intent(getApplicationContext(), SearchOnSpotify.class);
+                String extra = groupID + " " + spotifyAccessToken;
+                search.putExtra(SearchOnSpotify.GroupIDandAccessToken, extra);
+                Log.d("Start Search", spotifyAccessToken);
+                startActivity(search);
+            }
+        });
     }
 
 
@@ -134,6 +147,7 @@ public class GroupForAdmin extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SPOTIFY_SIGN_IN_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, data);
+            spotifyAccessToken = response.getAccessToken();
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
                 Config playerConfig = new Config(this, response.getAccessToken(), SPOTIFY_CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new SpotifyPlayer.InitializationObserver() {
@@ -156,7 +170,6 @@ public class GroupForAdmin extends AppCompatActivity implements
 
     @Override
     public void onLoggedIn() {
-        mPlayer.playUri(null, "spotify:track:2TpxZ7JUBn3uw46aR7qd6V", 0, 0);
     }
 
     @Override

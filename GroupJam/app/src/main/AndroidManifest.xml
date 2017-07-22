@@ -7,7 +7,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_group_jam"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -40,7 +40,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".SearchOnSpotify"
+            android:label="@string/title_activity_search_on_spotify"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

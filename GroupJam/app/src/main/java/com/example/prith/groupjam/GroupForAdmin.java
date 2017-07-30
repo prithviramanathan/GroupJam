@@ -5,15 +5,19 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +34,7 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
+import com.squareup.picasso.Picasso;
 
 public class GroupForAdmin extends AppCompatActivity implements
         Player.NotificationCallback, ConnectionStateCallback {
@@ -41,6 +46,8 @@ public class GroupForAdmin extends AppCompatActivity implements
     FirebaseAuth auth;
     FirebaseDatabase mDatabase;
     DatabaseReference allGroupsReference;
+    DatabaseReference mThisGroup;
+    DatabaseReference mQueue;
     final int SPOTIFY_SIGN_IN_CODE = 1337;
 
     final String SPOTIFY_CLIENT_ID = "b65b55195dfe4a1b99d1422eb6014ceb";
@@ -49,8 +56,12 @@ public class GroupForAdmin extends AppCompatActivity implements
 
     TextView accessCodeView;
     TextView capacityView;
+    RecyclerView mSongRecycler;
+    FirebaseRecyclerAdapter<Song, SongCollectionViewHolder> mAdapter;
 
     FloatingActionButton searchOnSpotify;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +76,15 @@ public class GroupForAdmin extends AppCompatActivity implements
         mDatabase = FirebaseDatabase.getInstance();
         allGroupsReference = mDatabase.getReference("Groups");
 
+
         accessCodeView = (TextView) findViewById(R.id.accessCodeDisplay);
         capacityView = (TextView) findViewById(R.id.memberCountDisplay);
         String accessCodeDisplay = "Access Code: " + accessCode;
         accessCodeView.setText(accessCodeDisplay);
+
+        mSongRecycler = (RecyclerView) findViewById(R.id.songsForAdmins);
+        mSongRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
 
         allGroupsReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -78,12 +94,27 @@ public class GroupForAdmin extends AppCompatActivity implements
                     Log.d("group", "" + group.child("accessCode").getValue());
                     if(accessCode.equals(group.child("accessCode").getValue())){
                         groupID = group.getRef().getKey();
+
                         allGroupsReference.child(groupID).child("members").child(auth.getCurrentUser().getUid()).setValue("member");
                         String cap = "Members: " + group.child("members").getChildrenCount();
                         toolbar.setTitle("" + group.child("name").getValue());
                         capacityView.setText(cap);
                     }
                 }
+                mThisGroup = allGroupsReference.child(groupID);
+                mQueue = mThisGroup.child("Queue");
+                mThisGroup.keepSynced(true);
+                mQueue.keepSynced(true);
+                mAdapter = new FirebaseRecyclerAdapter<Song, SongCollectionViewHolder>(Song.class,
+                        R.layout.search_result_item, SongCollectionViewHolder.class, mQueue) {
+                    @Override
+                    protected void populateViewHolder(SongCollectionViewHolder viewHolder, Song model, int position) {
+                        viewHolder.titleView.setText(model.getSongTitle());
+                        viewHolder.artistView.setText(model.getArtistName());
+                        Picasso.with(viewHolder.posterView.getContext()).load(model.getPosterURL()).into(viewHolder.posterView);
+                    }
+                };
+                mSongRecycler.setAdapter(mAdapter);
             }
 
             @Override
@@ -91,6 +122,7 @@ public class GroupForAdmin extends AppCompatActivity implements
 
             }
         });
+
 
 
 
@@ -207,5 +239,33 @@ public class GroupForAdmin extends AppCompatActivity implements
         // VERY IMPORTANT! This must always be called or else you will leak resources
         Spotify.destroyPlayer(this);
         super.onDestroy();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+
+    public static class SongCollectionViewHolder extends RecyclerView.ViewHolder {
+        public TextView titleView;
+        public TextView artistView;
+        public ImageView posterView;
+
+        public SongCollectionViewHolder(View view) {
+            super(view);
+            titleView = (TextView) itemView.findViewById(R.id.titleTextView);
+            artistView = (TextView) itemView.findViewById(R.id.singerTextView);
+            posterView = (ImageView) itemView.findViewById(R.id.albumArtView);
+        }
+
     }
 }

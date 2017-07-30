@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,6 +32,7 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
+import com.squareup.picasso.Picasso;
 
 public class GroupForNormals extends AppCompatActivity implements
         Player.NotificationCallback, ConnectionStateCallback {
@@ -36,10 +40,15 @@ public class GroupForNormals extends AppCompatActivity implements
     String accessCode;
     String groupName;
     String groupID;
+    String spotifyAccessToken;
     FirebaseAuth auth;
     FirebaseDatabase mDatabase;
     DatabaseReference allGroupsReference;
+    DatabaseReference mThisGroup;
+    DatabaseReference mQueue;
     final int SPOTIFY_SIGN_IN_CODE = 1337;
+    RecyclerView mSongRecycler;
+    FirebaseRecyclerAdapter<Song, GroupForAdmin.SongCollectionViewHolder> mAdapter;
 
     final String SPOTIFY_CLIENT_ID = "b65b55195dfe4a1b99d1422eb6014ceb";
     final String SPOTIFY_URI = "myGroupJam://callback";
@@ -47,11 +56,12 @@ public class GroupForNormals extends AppCompatActivity implements
 
     TextView accessCodeView;
     TextView capacityView;
+    FloatingActionButton searchOnSpotify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_for_admin);
+        setContentView(R.layout.activity_group_for_normals);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -65,6 +75,10 @@ public class GroupForNormals extends AppCompatActivity implements
         capacityView = (TextView) findViewById(R.id.memberCountDisplay);
         String accessCodeDisplay = "Access Code: " + accessCode;
         accessCodeView.setText(accessCodeDisplay);
+
+        mSongRecycler = (RecyclerView) findViewById(R.id.songsForNormals);
+        mSongRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
 
         allGroupsReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -80,6 +94,21 @@ public class GroupForNormals extends AppCompatActivity implements
                         capacityView.setText(cap);
                     }
                 }
+
+                mThisGroup = allGroupsReference.child(groupID);
+                mQueue = mThisGroup.child("Queue");
+                mThisGroup.keepSynced(true);
+                mQueue.keepSynced(true);
+                mAdapter = new FirebaseRecyclerAdapter<Song, GroupForAdmin.SongCollectionViewHolder>(Song.class,
+                        R.layout.search_result_item, GroupForAdmin.SongCollectionViewHolder.class, mQueue) {
+                    @Override
+                    protected void populateViewHolder(GroupForAdmin.SongCollectionViewHolder viewHolder, Song model, int position) {
+                        viewHolder.titleView.setText(model.getSongTitle());
+                        viewHolder.artistView.setText(model.getArtistName());
+                        Picasso.with(viewHolder.posterView.getContext()).load(model.getPosterURL()).into(viewHolder.posterView);
+                    }
+                };
+                mSongRecycler.setAdapter(mAdapter);
             }
 
             @Override
@@ -99,6 +128,18 @@ public class GroupForNormals extends AppCompatActivity implements
 
         AuthenticationClient.openLoginActivity(this, SPOTIFY_SIGN_IN_CODE, request);
 
+
+        searchOnSpotify = (FloatingActionButton) findViewById(R.id.addNormalSongs);
+        searchOnSpotify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent search = new Intent(getApplicationContext(), SearchOnSpotify.class);
+                String extra = groupID + " " + spotifyAccessToken;
+                search.putExtra(SearchOnSpotify.GroupIDandAccessToken, extra);
+                Log.d("Start Search", spotifyAccessToken);
+                startActivity(search);
+            }
+        });
 
     }
 
@@ -133,6 +174,7 @@ public class GroupForNormals extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SPOTIFY_SIGN_IN_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, data);
+            spotifyAccessToken = response.getAccessToken();
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
                 Config playerConfig = new Config(this, response.getAccessToken(), SPOTIFY_CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new SpotifyPlayer.InitializationObserver() {

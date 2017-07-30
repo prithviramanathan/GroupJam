@@ -75,7 +75,7 @@ public class SearchOnSpotify extends AppCompatActivity {
         mTracks = new ArrayList<>();
         mRecyclerView = (RecyclerView) findViewById(R.id.spotifyResults);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mSearchAdapter = new SearchResultAdapter(mTracks);
+        mSearchAdapter = new SearchResultAdapter(mTracks, groupID);
         mRecyclerView.setAdapter(mSearchAdapter);
 
         //to search we are using kaaes's spotify api
